@@ -1,0 +1,25 @@
+name: Automatic Commit
+
+on:
+  schedule:
+    - cron: '0 11,23 * * *'  # Schedule runs at 11 am and 11 pm UTC
+
+jobs:
+  commit:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set Up Git
+        run: |
+          git config --local user.email "actions@github.com"
+          git config --local user.name "GitHub Actions"
+
+      - name: Make Automatic Commit
+        run: |
+          echo "Automatic commit at $(Get-Date)" | Out-File -FilePath commit-file.txt -Append
+          git add commit-file.txt
+          git commit -m "Automatic commit at $(Get-Date)"
+          git push
